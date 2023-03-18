@@ -6,7 +6,7 @@ import iconList from './data/iconList'
 
 function App() {
   const [city, setCity] = useState('');
-  const [imgWeather, setImgWeather] = useState('');
+  const [imgWeather1, setImgWeather1] = useState('https://cdn-icons-png.flaticon.com/512/6974/6974833.png');
   const [weatherData, setWeatherData] = useState(null)
 
   useEffect(() => {
@@ -24,24 +24,26 @@ function App() {
 
   
   const handleChange = (e) => {
-    setCity(e.target.value)
+    setCity(e.target.value);
+    for (let el in iconList) {
+      if (el.type === weatherStatus) {
+        setImgWeather1(el.type)
+      }
+    }
   }
   
-  const responseWeatherToUser = (weatherData) ? (
+
+  const weatherStatus = (!weatherData || weatherData.message==='city not found') ? null : weatherData.weather[0].main;
+
+  const responseWeatherToUser = (!weatherData || weatherData.message==='city not found') ? null : (
     <div>
+      <p>{weatherData.name}, {weatherData.sys.country}</p>
       <p>Temperature: {weatherData.main.temp} °C </p>
       <p>Feels like: {weatherData.main.feels_like} °C </p>
       <p>Weather: {weatherData.weather[0].main} </p>
-  </div>
-  ) : null;
-  
-  // if (weatherData.weather[0].main) {
-  //   for (let el in iconList) {
-  //     if (el.type === weatherData.weather[0].main) {
-  //       setImgWeather(el.img)
-  //     }
-  //   }
-  // }
+      <img src = {imgWeather1} alt ='' width='100px' />
+    </div>
+  )
 
   return (
     <div className="App">
@@ -55,18 +57,8 @@ function App() {
         ></input>
 
         {/* Response */}
-        <div>
-            {/* {weatherData && (
-              <div>
-                  <p>Temperature: {weatherData.main.temp} °C </p>
-                  <p>Feels like: {weatherData.main.feels_like} °C </p>
-                  <p>Weather: {weatherData.weather[0].main} </p>
-              </div>
-            )} */}
-            {responseWeatherToUser }
+        {responseWeatherToUser }
 
-          {/* <img src={imgWeather} alt='icon'/> */}
-        </div>
     </div>
   );
 }
