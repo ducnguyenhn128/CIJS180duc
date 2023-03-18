@@ -16,6 +16,13 @@ function App() {
       const json = await response.json();
       setWeatherData(json);
       
+      // Get image, to description weather
+      const weatherStatus = json.weather[0].main;
+      for (let el of iconList) {
+        if (el.type === weatherStatus) {
+          setImgWeather1(el.img)
+        }
+      }
     }
     if (city) {
       getData();
@@ -25,23 +32,17 @@ function App() {
   
   const handleChange = (e) => {
     setCity(e.target.value);
-    for (let el in iconList) {
-      if (el.type === weatherStatus) {
-        setImgWeather1(el.type)
-      }
-    }
+
   }
   
-
-  const weatherStatus = (!weatherData || weatherData.message==='city not found') ? null : weatherData.weather[0].main;
-
   const responseWeatherToUser = (!weatherData || weatherData.message==='city not found') ? null : (
     <div>
       <p>{weatherData.name}, {weatherData.sys.country}</p>
       <p>Temperature: {weatherData.main.temp} °C </p>
       <p>Feels like: {weatherData.main.feels_like} °C </p>
       <p>Weather: {weatherData.weather[0].main} </p>
-      <img src = {imgWeather1} alt ='' width='100px' />
+      <img src = {imgWeather1} alt ='weather-icon
+      ' width='100px' />
     </div>
   )
 
